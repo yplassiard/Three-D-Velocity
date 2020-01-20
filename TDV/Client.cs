@@ -268,7 +268,7 @@ namespace TDV
 							// We now need to speak the message and then show an input box for the user to
 							// press ENTER to continue. This is because some screen readers
 							// Don't have a way to stop the running thread.
-							SapiSpeech.speak("[Welcome message]: " + messageOfTheDay + " (press ENTER to continue)", SapiSpeech.SpeakFlag.interruptable);
+							SapiSpeech.speak("[Welcome message]: " + messageOfTheDay + " (appuyez sur Entrée pour continuer)", SapiSpeech.SpeakFlag.interruptable);
 							Common.mainGUI.receiveInput().Trim();
 						}
 							System.Diagnostics.Trace.WriteLine("Server sent tag: " + serverTag);
@@ -280,7 +280,7 @@ namespace TDV
 					BPCSharedComponent.ExtendedAudio.DSound.playAndWait(BPCSharedComponent.ExtendedAudio.DSound.NSoundPath + "\\ncs.wav");
 				if ((resp & LoginMessages.badVersion) == LoginMessages.badVersion)
 				{
-					SapiSpeech.speak("There is a newer version of TDV available. Please update before logging on.", SapiSpeech.SpeakFlag.noInterrupt);
+					SapiSpeech.speak("Nouvelle version de TDV disponible. Veuillez mettre à jour avant de vous conocter.", SapiSpeech.SpeakFlag.noInterrupt);
 					return false;
 				}
 				if ((resp & LoginMessages.wrongCredentials) == LoginMessages.wrongCredentials)
@@ -370,7 +370,7 @@ namespace TDV
 					if (!CSCommon.isLiveConnection(client))
 					{
 						live = false;
-						SapiSpeech.speak("Error: Server crash.", SapiSpeech.SpeakFlag.noInterrupt);
+						SapiSpeech.speak("Erreur: Le serveur a planté.", SapiSpeech.SpeakFlag.noInterrupt);
 						Common.exitMenus = true;
 						Common.repop();
 						return;
@@ -768,19 +768,19 @@ namespace TDV
 		/// </summary>
 		public static void sendChatMessage()
 		{
-			SapiSpeech.speak("Enter message", SapiSpeech.SpeakFlag.interruptable);
+			SapiSpeech.speak("Entrez un message", SapiSpeech.SpeakFlag.interruptable);
 			String chatMsg = Common.mainGUI.receiveInput();
 			if (!chatMsg.Equals(""))
 				sendPublicChatMessage(chatMsg);
 			else //canceled chat
-				SapiSpeech.speak("Canceled", SapiSpeech.SpeakFlag.interruptable);
+				SapiSpeech.speak("Annulé", SapiSpeech.SpeakFlag.interruptable);
 		}
 
 		public static void sendPublicChatMessage(String message)
 		{
 			if (!String.IsNullOrEmpty(message))
 			{
-				SapiSpeech.speak("You say: " + message, SapiSpeech.SpeakFlag.interruptable);
+				SapiSpeech.speak("Vous dites: " + message, SapiSpeech.SpeakFlag.interruptable);
 				sendCommand(CSCommon.cmd_chat, false, message);
 			}
 		}
@@ -791,15 +791,15 @@ namespace TDV
 		/// <param name="tag">The ID of the player to send the message to</param>
 		public static void sendChatMessage(String tag)
 		{
-			SapiSpeech.speak("Enter message", SapiSpeech.SpeakFlag.interruptable);
+			SapiSpeech.speak("Entrez un message", SapiSpeech.SpeakFlag.interruptable);
 			String chatMsg = Common.mainGUI.receiveInput();
 			if (!chatMsg.Equals(""))
 			{
-				SapiSpeech.speak("You say: " + chatMsg, SapiSpeech.SpeakFlag.interruptable);
+				SapiSpeech.speak("Vous dites: " + chatMsg, SapiSpeech.SpeakFlag.interruptable);
 				sendCommand(CSCommon.cmd_chat, true, tag, chatMsg);
 			}
 			else //canceled chat
-				SapiSpeech.speak("Canceled", SapiSpeech.SpeakFlag.interruptable);
+				SapiSpeech.speak("Annulé", SapiSpeech.SpeakFlag.interruptable);
 		}
 
 		/// <summary>
@@ -908,7 +908,7 @@ namespace TDV
 			if (choice == -1)
 				return;
 			if (ids[choice].Equals(serverTag))
-				SapiSpeech.speak("The first sign of insanity is talking to yourself. Sorry, we can't let you do that!", SapiSpeech.SpeakFlag.interruptable);
+				SapiSpeech.speak("Le premier signe de démence est de se parler à soi-même. Désolé, on ne peut vous laisser faire ça!", SapiSpeech.SpeakFlag.interruptable);
 			else
 				sendChatMessage(ids[choice]);
 		}
@@ -966,7 +966,7 @@ namespace TDV
 			if (chatMessages.Count == 0)
 				return;
 			Common.mainGUI.copyMessage();
-			SapiSpeech.speak("Copied message " + chatMessages[chatPointer], SapiSpeech.SpeakFlag.interruptableButStop);
+			SapiSpeech.speak("message copié " + chatMessages[chatPointer], SapiSpeech.SpeakFlag.interruptableButStop);
 		}
 
 		public static String getCurrentMessage()
