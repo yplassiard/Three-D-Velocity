@@ -71,9 +71,9 @@ namespace TDV
 			Name = " Three-D Velocity";
 			lockObject = new Object();
 			if (!Common.isValidLicense())
-				Name += " - Demonstration";
+				Name += " - Démonstration";
 			else
-				Name += " - registered by " + Common.getLicensedName();
+				Name += " - enregistré par " + Common.getLicensedName();
 			Text = Name;
 			this.Show();
 			this.BringToFront();
@@ -269,7 +269,7 @@ namespace TDV
 					completedDownload = false;
 
 					if (!error) {
-						MessageBox.Show("The update download is complete. Click OK to begin installing. TDV will restart once the update is complete.", "Download Complete", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+						MessageBox.Show("Mise à jour téléchargée, appuyez sur OK pour lancer la mise à jour. TDV va redémarrer une fois la mise à jour terminée.", "Téléchargement Terminé", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
 						System.Diagnostics.Process.Start("Updater.exe", "tdv.exe");
 						SapiSpeech.enableJAWSHook();
 						Environment.Exit(0);
@@ -277,6 +277,8 @@ namespace TDV
 						Common.GenerateMenu("Error downloading update. Press ENTER to continue.", new String[] { "Ok" });
 				} //if getting update
 
+        // Force self-voicinf menus.
+        Options.menuVoiceMode = Options.VoiceModes.selfVoice;
 				// If they haven't selected self-voicing options yet or are using an older version with no speech delay, we need to reconfigure them.
 				if (Options.menuVoiceMode == Options.VoiceModes.none || ((Options.menuVoiceMode == Options.VoiceModes.screenReader || Options.statusVoiceMode == Options.VoiceModes.screenReader) && SapiSpeech.screenReaderRate == 0f))
 					setSVMode();
@@ -307,11 +309,11 @@ namespace TDV
 			}
 			catch (Exception err) {
 				if (err.Message.Contains("REGDB_E_CLASSNOTREG"))
-					MessageBox.Show("You do not have the latest DirectX components installed. " +
-						"You can download them from the following address:\r\n" +
+					MessageBox.Show("Vous n.avez pas les derniers composants DirectX installés. " +
+						"Vous pouvez les télécharger à partir de l'adresse:\r\n" +
 						"http://www.bpcprograms.com/programs/utilities/," +
-					" or directly from Microsoft at the following address: \r\nhttp://www.microsoft.com/directx.",
-						"Prerequisites",
+					" ou directement chez Microsoft ici: \r\nhttp://www.microsoft.com/directx.",
+						"DirectX Manquant",
 						MessageBoxButtons.OK,
 						MessageBoxIcon.Error);
 				else
@@ -1267,14 +1269,14 @@ namespace TDV
 		{
 			DateTime now = DateTime.Now;
 			if (now.Hour != Options.hour || now.Day != Options.day || now.Year != Options.year) {
-				String updatever = getPageContent("https://raw.githubusercontent.com/munawarb/Three-D-Velocity/master/version");
+				String updatever = getPageContent("https://raw.githubusercontent.com/yplassiard/Three-D-Velocity/master/version");
 				System.Diagnostics.Trace.WriteLine(updatever);
 				if (updatever.Equals("failed"))
 					return false;
 				float newVersion = float.Parse(updatever, CultureInfo.InvariantCulture.NumberFormat);
 				float oldVersion = float.Parse(Common.applicationVersion, CultureInfo.InvariantCulture.NumberFormat);
 				if (oldVersion < newVersion) {
-					DialogResult download = MessageBox.Show("Three-D Velocity version " + newVersion + " is available. You are running version " + oldVersion + ". Would you like to download version " + newVersion + " now?", "Update Available", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+					DialogResult download = MessageBox.Show("La version de Three-D Velocity " + newVersion + " est disponible. Vous utilisez actuellement la version " + oldVersion + ". Voulez-vous la télécharger maintenant?", "Mise à jour disponible", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 					if (download == DialogResult.Yes) {
 						updateTo(Common.applicationVersion, updatever, null);
 						return true;
@@ -1294,11 +1296,11 @@ namespace TDV
 		private void updateTo(String from, String to, String comments)
 		{
 			this.Invoke((MethodInvoker) delegate {
-				this.Text = "Downloading update, please wait...";
+				this.Text = "Téléchargement de la mise à jour, veuillez patienter...";
 				this.progressBar1.Visible = true;
 			});
 			Common.startMusic(DSound.SoundPath + "\\ms5.ogg", 0.5f);
-			downloadUpdate("https://github.com/munawarb/Three-D-Velocity-Binaries/archive/master.zip", "Three-D-Velocity-Binaries-master.zip");
+			downloadUpdate("https://github.com/yplassiard/Three-D-Velocity-Binaries/archive/master.zip", "Three-D-Velocity-Binaries-master.zip");
 		}
 
 		public void copyMessage()
