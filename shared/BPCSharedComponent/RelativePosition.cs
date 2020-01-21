@@ -161,26 +161,26 @@ namespace BPCSharedComponent.VectorCalculation
 			double vDS = Math.Round(vDistance, 1);
 			string dirS = "";
 			if (vDS > 0.0)
-				dirS = "above";
+				dirS = "au-dessus";
 			else if (vDS < 0.0)
-				dirS = "below";
+				dirS = "en dessous";
 			else if (vDS == 0.0)
 				dirS = "";
 
-			String msgS = clockMark + " o'clock, "
+			String msgS = clockMark + " heures, "
 			 + Convert.ToString(Math.Round(distance, 1),
 			 CultureInfo.InvariantCulture)
-			 + " miles closure. ";
+			 + " nautiques. ";
 			if (isNoseFacing)
-				msgS += "Nose on, ";
+				msgS += "Face au nez, ";
 			else if (isTailFacing)
-				msgS += "tail on, ";
+				msgS += "Face à la queue, ";
 			else if (isWingFacing)
-				msgS += "wing on, ";
+				msgS += "Face aux ailes, ";
 
 			if (!dirS.Equals(""))
-				msgS += "and " + Convert.ToString(Math.Abs(vDS),
-				CultureInfo.InvariantCulture) + " feet "
+				msgS += "et " + Convert.ToString(Math.Abs(vDS),
+				CultureInfo.InvariantCulture) + " pieds "
 				+ dirS;
 			return msgS;
 		}

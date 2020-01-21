@@ -926,9 +926,9 @@ namespace TDV
 					using (BinaryWriter bw = new BinaryWriter(new MemoryStream())) {
 						bw.Write((sbyte)1);
 						SapiSpeech.speak("" + bw.BaseStream.Position, SapiSpeech.SpeakFlag.interruptable);
-						SapiSpeech.speak("Length: " + bw.BaseStream.Length, SapiSpeech.SpeakFlag.interruptable);
+						SapiSpeech.speak("Longueur: " + bw.BaseStream.Length, SapiSpeech.SpeakFlag.interruptable);
 						bw.Write("Hi there!");
-						SapiSpeech.speak("Length: " + bw.BaseStream.Length, SapiSpeech.SpeakFlag.interruptable);
+						SapiSpeech.speak("Longueur: " + bw.BaseStream.Length, SapiSpeech.SpeakFlag.interruptable);
 						blah = ((MemoryStream)bw.BaseStream).ToArray();
 						foreach (byte bb in blah)
 							SapiSpeech.speak("" + bb, SapiSpeech.SpeakFlag.interruptable);
@@ -1667,7 +1667,7 @@ namespace TDV
 						else {
 							Projector proj = Mission.island;
 							RelativePosition ispos = getPosition(proj);
-							strArray[i] = Common.returnSvOrSr(() => proj.name + ".wav&at.wav&" + ispos.clockMark + "o.wav&#" + Common.cultureNeutralRound(ispos.distance, 1) + "&mc.wav", () => $"Island at {ispos.clockMark} o'clock, {Common.cultureNeutralRound(ispos.distance, 1)} miles closure", Options.menuVoiceMode);
+							strArray[i] = Common.returnSvOrSr(() => proj.name + ".wav&at.wav&" + ispos.clockMark + "o.wav&#" + Common.cultureNeutralRound(ispos.distance, 1) + "&mc.wav", () => $"île à {ispos.clockMark} heures, {Common.cultureNeutralRound(ispos.distance, 1)} nautiques", Options.menuVoiceMode);
 						} //if we're not above the island
 						continue;
 					}
@@ -1780,7 +1780,7 @@ namespace TDV
 				playFinalOgg(DSound.SoundPath + "\\demo.ogg");
 			} else if (cause == Interaction.Cause.finishedRace) {
 				if (!isAI) {
-					speak("You have completed the race with a time of " + getTimeElapsed(), SapiSpeech.SpeakFlag.interruptable);
+					speak("Vous avez terminé la course avec un temps de " + getTimeElapsed(), SapiSpeech.SpeakFlag.interruptable);
 					if (Mission.isMission && Interaction.getRanks() == null)
 						Mission.racingScore += Mission.pointsWorth;
 				}
@@ -1789,7 +1789,7 @@ namespace TDV
 				 || cause == Interaction.Cause.destroyedByWeapon) {
 				if (isSender()) {
 					if (cause == Interaction.Cause.engineDestroyed) {
-						speak("Your engine exploded.");
+						speak("Votre moteur a explosé.");
 						sMessage = name + "'s engine exploded.";
 					}
 				} //if sender
@@ -1809,7 +1809,7 @@ namespace TDV
 				if (!isAI)
 					terminateInput();
 				if (isSender()) {
-					speak("You made a pilot error");
+					speak("Vous avez fait une erreur de pilotage.");
 					sMessage = name + " made a pilot error";
 				}
 				if (!isAI
@@ -2048,26 +2048,26 @@ weapon.firingRange);
 					return true;
 				case Status.turnRadius:
 					if (bankAngle != 0 && !isBankStallConditions())
-						Common.executeSvOrSr(() => SelfVoice.NLS("#" + (int)getTurnRadius() + "&feet.wav", true, true), () => SapiSpeech.speak($"{getTurnRadius()} feet", flag), Options.statusVoiceMode);
+						Common.executeSvOrSr(() => SelfVoice.NLS("#" + (int)getTurnRadius() + "&feet.wav", true, true), () => SapiSpeech.speak($"{getTurnRadius()} pieds", flag), Options.statusVoiceMode);
 					else
-						Common.executeSvOrSr(() => SelfVoice.NLS("unknown.wav", true, true), () => SapiSpeech.speak("Unknown", flag), Options.statusVoiceMode);
+						Common.executeSvOrSr(() => SelfVoice.NLS("unknown.wav", true, true), () => SapiSpeech.speak("Inconnu", flag), Options.statusVoiceMode);
 					return true;
 				case Status.turnRate:
 					int rt = (int)Math.Floor(getRateOfTurn());
-					Common.executeSvOrSr(() => SelfVoice.NLS("#" + rt + "&" + (rt == 1 ? "dps.wav" : "dsps.wav"), true, true), () => SapiSpeech.speak($"{rt} degree{(rt == 1 ? "":"s")} per second", flag), Options.statusVoiceMode);
+					Common.executeSvOrSr(() => SelfVoice.NLS("#" + rt + "&" + (rt == 1 ? "dps.wav" : "dsps.wav"), true, true), () => SapiSpeech.speak($"{rt} degré{(rt == 1 ? "":"s")} par seconde", flag), Options.statusVoiceMode);
 					return true;
 				case Status.bankAngle:
-					Common.executeSvOrSr(() => SelfVoice.VoiceNumber(bankAngle, true), () => SapiSpeech.speak(""+bankAngle, flag), Options.statusVoiceMode);
+					Common.executeSvOrSr(() => SelfVoice.VoiceNumber(bankAngle, true), () => SapiSpeech.speak("" + bankAngle, flag), Options.statusVoiceMode);
 					return true;
 				case Status.altitudeRate:
 					int tr = (int)((fallRate == 0.0f) ? (getVerticalSpeed() / 60) : (fallRate * 60 / 3));
-					Common.executeSvOrSr(() => SelfVoice.NLS("#" + tr + "&fpm.wav", true, true), () => SapiSpeech.speak($"{tr} feet per minute", flag), Options.statusVoiceMode);
+					Common.executeSvOrSr(() => SelfVoice.NLS("#" + tr + "&fpm.wav", true, true), () => SapiSpeech.speak($"{tr} pieds par minute", flag), Options.statusVoiceMode);
 					return true;
 				case Status.ammunition:
 					Common.executeSvOrSr(() => SelfVoice.VoiceNumber(weapon.ammunitionFor(weapon.weaponIndex), true), () => SapiSpeech.speak("" + weapon.ammunitionFor(weapon.weaponIndex), flag), Options.statusVoiceMode);
 					return true;
 				case Status.fuel:
-					Common.executeSvOrSr(() => SelfVoice.NLS("#" + (int)m_fuelWeight + "&pof.wav", true, true), () => SapiSpeech.speak($"{(int)m_fuelWeight} pounds of fuel", flag), Options.statusVoiceMode);
+					Common.executeSvOrSr(() => SelfVoice.NLS("#" + (int)m_fuelWeight + "&pof.wav", true, true), () => SapiSpeech.speak($"{(int)m_fuelWeight} livres de carburant", flag), Options.statusVoiceMode);
 					return true;
 				case Status.targetIntegrity:
 					if (weapon.isValidLock() && !(weapon.getLockedTarget() is LandingBeacon)) {
@@ -2076,10 +2076,10 @@ weapon.firingRange);
 					} else
 						return false;
 				case Status.integrity:
-					Common.executeSvOrSr(() => SelfVoice.NLS("#" + getHealthPercent() + "&p.wav", true, true), () => SapiSpeech.speak($"{getHealthPercent()} percent", flag), Options.statusVoiceMode);
+					Common.executeSvOrSr(() => SelfVoice.NLS("#" + getHealthPercent() + "&p.wav", true, true), () => SapiSpeech.speak($"{getHealthPercent()} pour cent", flag), Options.statusVoiceMode);
 					return true;
 				case Status.engineIntegrity:
-					Common.executeSvOrSr(() => SelfVoice.NLS("#" + getEngineDamagePercent() + "&p.wav", true, true), () => SapiSpeech.speak($"{getEngineDamagePercent()} percent", flag), Options.statusVoiceMode);
+					Common.executeSvOrSr(() => SelfVoice.NLS("#" + getEngineDamagePercent() + "&p.wav", true, true), () => SapiSpeech.speak($"{getEngineDamagePercent()} pour cent", flag), Options.statusVoiceMode);
 					return true;
 				case Status.sector:
 					Common.executeSvOrSr(() => SelfVoice.NLS(Interaction.getSector((Projector)this), true, true), () => SapiSpeech.speak(Interaction.getSector((Projector)this, false), flag), Options.statusVoiceMode);
@@ -2102,11 +2102,11 @@ weapon.firingRange);
 						else
 							msgstr += "mis.wav";
 						SelfVoice.NLS(msgstr, true, true);
-					}, () => SapiSpeech.speak($"{ds} mile{((ds==1)?"":"s")}", flag), Options.statusVoiceMode);
+					}, () => SapiSpeech.speak($"{ds} nautique{((ds==1)?"":"s")}", flag), Options.statusVoiceMode);
 					return true;
 				case Status.altimeter:
 					String alt = Common.cultureNeutralRound(z, 1);
-					Common.executeSvOrSr(() => SelfVoice.NLS("#" + alt + "&" + "feet.wav", true, true), () => SapiSpeech.speak($"{alt} feet", flag), Options.statusVoiceMode);
+					Common.executeSvOrSr(() => SelfVoice.NLS("#" + alt + "&" + "feet.wav", true, true), () => SapiSpeech.speak($"{alt} pieds", flag), Options.statusVoiceMode);
 					sayRelative = false;
 					return true;
 				case Status.course:
@@ -2115,7 +2115,7 @@ weapon.firingRange);
 					return true;
 				case Status.rank:
 					if (Options.mode == Options.Modes.racing && cause != Interaction.Cause.sentForLanding) {
-						Common.executeSvOrSr(() => SelfVoice.NLS("yai.wav" + "&" + Common.convertToWordNumber(getRank()) + ".wav" + "&" + "pl.wav", true, true), () => SapiSpeech.speak($"You are in {Common.convertToWordNumber(getRank()) } place", flag), Options.statusVoiceMode);
+						Common.executeSvOrSr(() => SelfVoice.NLS("yai.wav" + "&" + Common.convertToWordNumber(getRank()) + ".wav" + "&" + "pl.wav", true, true), () => SapiSpeech.speak($"Vous êtes en {Common.convertToWordNumber(getRank()) } position", flag), Options.statusVoiceMode);
 						return true;
 					} else
 						return false;
@@ -2128,7 +2128,7 @@ weapon.firingRange);
 						+ "&es.wav&#"
 						+ rpm + "&rpm.wav",
 						true, true);
-					}, () => SapiSpeech.speak($"Airspeed: {airspeed} knots; Engine speed: {rpm} rpm", flag), Options.statusVoiceMode);
+					}, () => SapiSpeech.speak($"Vitesse: {airspeed} noeuds; Vitesse des moteurs: {rpm} tpm", flag), Options.statusVoiceMode);
 					return true;
 				case Status.angleOfAttack:
 					Common.executeSvOrSr(() => SelfVoice.VoiceNumber(virtualNoseAngle, true), () => SapiSpeech.speak("" + virtualNoseAngle, flag), Options.statusVoiceMode);
@@ -2827,7 +2827,7 @@ weapon.firingRange);
 						true, true);
 					}, () =>
 					{
-						SapiSpeech.speak($"{(int)z} feet");
+						SapiSpeech.speak($"{(int)z} pieds");
 					}, Options.statusVoiceMode);
 				}
 				speakVDTime = Environment.TickCount;
@@ -2905,8 +2905,8 @@ weapon.firingRange);
 						return;
 					SelfVoice.NLS(
 						getPosition(
-						weapon.getLockedTarget()
-						).clockMark
+                        weapon.getLockedTarget()
+                        ).clockMark
 						+ "o.wav",
 						true, true);
 				} else {

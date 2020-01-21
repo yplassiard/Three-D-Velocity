@@ -1054,7 +1054,7 @@ namespace TDV
 			if (isSender())
 			{
 				if (!id.StartsWith("B-", StringComparison.OrdinalIgnoreCase))
-					SapiSpeech.speak("You were destroyed by " + name, SapiSpeech.SpeakFlag.interruptable);
+					SapiSpeech.speak("Vous avez été détruit par " + name, SapiSpeech.SpeakFlag.interruptable);
 				Client.sendCommand(CSCommon.cmd_serverMessage, this.name + " was poned by " + name);
 				if (!isBot() && tag != null)
 					Client.sendCommand(CSCommon.cmd_updatePoints, tag);

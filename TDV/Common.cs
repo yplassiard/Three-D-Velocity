@@ -47,33 +47,33 @@ namespace TDV
 		private static Random random = new Random();
 		private static Dictionary<String, String> friendlyNames = new Dictionary<String, String>()
 		{
-			{"r1", "Racer 1" },
-			{"r2", "Racer 2" },
-			{"r3", "Racer 3" },
-			{"r4", "Racer 4" },
-			{"r5", "Racer 5" },
-			{"r6", "Racer 6" },
-			{"f1", "Fighter 1" },
-			{"f2", "Fighter 2" },
-			{"f3", "Fighter 3" },
-			{"f4", "Fighter 4" },
-			{"f5", "Fighter 5" },
-			{"f6", "Fighter 6" },
-			{"ab", "Airbase" },
-			{"ac", "Aircraft Carrier" },
-			{"bs", "Battleship" },
-			{"b", "Bridge" },
-			{ "c", "Chopper" },
-			{"gt", "Guard Tower" },
-			{"i", "Island" },
-			{"db", "Dark Blaze" },
-			{"lb", "Landing Beacon" },
-			{"r", "Refueler" },
+			{"r1", "Pilote 1" },
+			{"r2", "Pilote 2" },
+			{"r3", "Pilote 3" },
+			{"r4", "Pilote 4" },
+			{"r5", "Pilote 5" },
+			{"r6", "Pilote 6" },
+			{"f1", "Combattant 1" },
+			{"f2", "Combattant 2" },
+			{"f3", "Combattant 3" },
+			{"f4", "Combattant 4" },
+			{"f5", "Combattant 5" },
+			{"f6", "Combattant 6" },
+			{"ab", "Basa aérienne" },
+			{"ac", "Porte-avion" },
+			{"bs", "Navire de guerre" },
+			{"b", "Pont" },
+			{ "c", "Hélicoptère" },
+			{"gt", "Tour de guarde" },
+			{"i", "île" },
+			{"db", "brasier sombre" },
+			{"lb", "Piste d'atterrissage" },
+			{"r", "Ravitailleur" },
 			{"pp", "Powerplant" },
-			{"rs", "Radar Station" },
+			{"rs", "Station radar" },
 			{"sb", "SAM Battery" },
 			{"t", "Tank" },
-			{"tg", "Training Grounds" }
+			{"tg", "Quartiers d'entraînement" }
 		};
 		public static float volumeIncrementValue { get { return 0.25f; } }
 		public static float volumeFadeValue{get{return 0.05f; } }
@@ -183,20 +183,16 @@ namespace TDV
 					cmdLine = args[0];
 				if (Common.cmdLine != null && Common.cmdLine.Equals("reset")) {
 					DialogResult r =
-						MessageBox.Show(@"Would you like to remove your mission data? Answering 'Yes' will not remove your saved game; it will only remove your simulation records.
-
-If you do this, you will have to start over from Racing Mode. This process is NOT reversible.",
-																							  "Remove Mission Data",
+						MessageBox.Show(@"Souhaitez-vous supprimer les données de la mission? Le fait de répondre Oui ne supprime pas votre sauvegarde. Vous devrez tooutefois recommencer depuis le mode Course. Ce processus est irréversille.",
+																							  "Supprimer les données de missions",
 						MessageBoxButtons.YesNo,
 						MessageBoxIcon.Question);
 					if (r == DialogResult.Yes)
 						File.Delete(Mission.missionFile);
 
 					r =
-						MessageBox.Show(@"Would you like to delete your configuration settings? Answering 'Yes' will delete settings set through the 'Options' menu during game play.
-
-Answering 'Yes' will also delete your joystick calibration data if you have your joystick connected.",
-																 "Remove Settings",
+						MessageBox.Show(@"Souhaitez-vous effacer les paramètres? Le fait de répondre Oui efface les paramètres du menu Options durant le jeu. Cela effacera également les données de calibration de votre joystick s'il est connecté.",
+																 "Supprimer les paramètres",
 																 MessageBoxButtons.YesNo,
 																 MessageBoxIcon.Question);
 					if (r == DialogResult.Yes) {
@@ -208,8 +204,8 @@ Answering 'Yes' will also delete your joystick calibration data if you have your
 						}
 					} //if yes
 
-					MessageBox.Show("This program will now exit.",
-						"Finished",
+					MessageBox.Show("Le programme va se terminer.",
+						"Terminé",
 						MessageBoxButtons.OK,
 						MessageBoxIcon.Information);
 					Application.Exit();
@@ -275,7 +271,7 @@ Answering 'Yes' will also delete your joystick calibration data if you have your
 
 		public static string convertToWordNumber(int number)
 		{
-			string[] numbers = { "first", "second", "third", "fourth", "fifth", "sixth", "seventh", "eighth", "ninth", "tenth"
+			string[] numbers = { "premier", "deuxième", "troisième", "quatrième", "sinquième", "sixième", "septième", "huitième", "neuvième", "dixième"
 	};
 			return (numbers[number - 1]);
 		}
@@ -572,8 +568,8 @@ Answering 'Yes' will also delete your joystick calibration data if you have your
 				theFile.Write(Environment.NewLine + "Extra information: " + msg);
 			theFile.Flush();
 			theFile.Close();
-			SapiSpeech.speak("An error has occurred in the program. An error log has been generated in error.log located in your application data directory. Press enter to terminate the program.", SapiSpeech.SpeakFlag.interruptable);
-			MessageBox.Show("An error has occured. A log has been generated.", "TDV.exe - Application Error",
+			SapiSpeech.speak("Une erreur s'est produite. Un journal d'erreur nommé error.log a été généré dans le répertoire des données du jeu. Appuyez sur entrée pour quitter.", SapiSpeech.SpeakFlag.interruptable);
+			MessageBox.Show("Une erreur interne s'est produite, un journal de débogage a été créé.", "TDV.exe - Erreur d'application",
 						 MessageBoxButtons.OK, MessageBoxIcon.Error);
 			menuNotifier.Set();
 			SapiSpeech.enableJAWSHook();
@@ -633,13 +629,13 @@ Answering 'Yes' will also delete your joystick calibration data if you have your
 				 * Once all adds are complete, client will receive a startGame command from the server.
 				 * */
 				bool connected = false;
-				SapiSpeech.speak("Enter IP address or domain to connect to.", SapiSpeech.SpeakFlag.interruptable);
+				SapiSpeech.speak("Entrez l'adresse IP ou le nom de domaine auquel se connecter.", SapiSpeech.SpeakFlag.interruptable);
 				String ip = Common.mainGUI.receiveInput(Options.ipOrDomain, false).Trim();
 				if (ip.Equals("")) {
 					menuNotifier.Set();
 					return;
 				}
-				SapiSpeech.speak("Enter your call sign. This is how you'll be known on the server.", SapiSpeech.SpeakFlag.interruptable);
+				SapiSpeech.speak("Entrez votre identifiant (Call Sign). Il s'agit du nom qui vous identifiera sur le serveur.", SapiSpeech.SpeakFlag.interruptable);
 				String callSign = Common.mainGUI.receiveInput(Options.callSign, false).Trim();
 				if (callSign.Equals("")) {
 					menuNotifier.Set();
@@ -648,12 +644,12 @@ Answering 'Yes' will also delete your joystick calibration data if you have your
 				Options.ipOrDomain = ip;
 				Options.callSign = callSign;
 				Options.writeToFile();
-				SapiSpeech.playOrSpeakMenu(DSound.NSoundPath + "\\c1.wav", "Please wait...");
+				SapiSpeech.playOrSpeakMenu(DSound.NSoundPath + "\\c1.wav", "Veuillez ratienter...");
 				connected = Client.connect(ip, callSign, 4444);
 				failedConnect = !connected;
 				if (!connected) {
 					if ((Client.getMessages() & Client.LoginMessages.wrongCredentials) != Client.LoginMessages.wrongCredentials)
-						SapiSpeech.playOrSpeakMenu(DSound.NSoundPath + "\\c2.wav", "Could not connect. Check your connection and try again. If you are running a firewall, make sure it allows all connection attempts for Three-D Velocity.");
+						SapiSpeech.playOrSpeakMenu(DSound.NSoundPath + "\\c2.wav", "Impossible de se connecter. Vérifiez votre connexion et réessayez. Si votre pare-feu est actif, vérifiez également qu'il autorise bien toutes les connexions de Three D Velocity.");
 				} else { //connected
 					fadeMusic();
 					buildOnlineMenu();
@@ -664,7 +660,7 @@ Answering 'Yes' will also delete your joystick calibration data if you have your
 				if (connected) {
 					Client.closeConnection();
 					fadeMusic(); //hangar music
-					SapiSpeech.playOrSpeakMenu(DSound.NSoundPath + "\\c4.wav", "You have left the hangar");
+					SapiSpeech.playOrSpeakMenu(DSound.NSoundPath + "\\c4.wav", "Vous avez quitté le hangar.");
 				}
 				menuNotifier.Set();
 				return;
@@ -753,7 +749,7 @@ Answering 'Yes' will also delete your joystick calibration data if you have your
 		/// </summary>
 		private static void buildOnlineMenu()
 		{
-			String menuIntro = Common.returnSvOrSr(() => "c3.wav", () => "You're now in the hangar.", Options.menuVoiceMode);
+			String menuIntro = Common.returnSvOrSr(() => "c3.wav", () => "Vous êtes dans le hangar.", Options.menuVoiceMode);
 			String[] topLevelMenu = Common.returnSvOrSr(() => new string[] { "menuc_1.wav", "menuc_2.wav", "menuc_3.wav",
 				(Options.preorder) ? "menuc_4.wav":"",
 				(Options.preorder) ? "menuc_5.wav":"", "menuc_6.wav", "menuc_7.wav"
@@ -791,7 +787,7 @@ Answering 'Yes' will also delete your joystick calibration data if you have your
 							BinaryReader gResp = Client.getResponse(CSCommon.buildCMDString(CSCommon.cmd_requestGameList));
 							int listLength = gResp.ReadInt16();
 							if (listLength == 0) {
-								SapiSpeech.playOrSpeakMenu(DSound.NSoundPath + "\\ng.wav", "No games available");
+								SapiSpeech.playOrSpeakMenu(DSound.NSoundPath + "\\ng.wav", "Aucune partie ouverte.");
 								break;
 							}
 
@@ -931,7 +927,7 @@ Answering 'Yes' will also delete your joystick calibration data if you have your
 						case 4: //stats
 							using (BinaryReader statReader = Client.getResponse(CSCommon.buildCMDString(CSCommon.cmd_getStats))) {
 								if (!statReader.ReadBoolean())
-									SapiSpeech.speak("No stats available.", SapiSpeech.SpeakFlag.noInterrupt);
+									SapiSpeech.speak("Statistiques non disponible.", SapiSpeech.SpeakFlag.noInterrupt);
 								else {
 									String stats = String.Format("You have {0} valor points. Your power ratio is {1}, with {2} wins and {3} losses.",
 									statReader.ReadInt32(), Math.Round(statReader.ReadSingle(), 1), statReader.ReadInt32(), statReader.ReadInt32());

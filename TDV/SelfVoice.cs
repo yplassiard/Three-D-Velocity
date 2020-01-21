@@ -19,9 +19,9 @@ namespace TDV
 
 	public class SelfVoice
 	{
-		private static String[] digits = new string[] { "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen" };
-		private static String[] tens = new string[] { "twenty", "thirty", "forty", "fifty", "sixty", "seventy", "eighty", "ninety" };
-		private static String[] thousands = new string[] { "thousand", "million", "billion" };
+		private static String[] digits = new string[] { "un", "deux", "trois", "quatre", "cinq", "six", "sept", "huit", "neuf", "dix", "onze", "douze", "treize", "quatorze", "quinze", "seize", "dix-sept", "dix-huit", "dix-neuf" };
+		private static String[] tens = new string[] { "vingt", "trente", "quarante", "cinquante", "soixante", "soixante", "quatre-vingt", "quatre-vingt" };
+		private static String[] thousands = new string[] { "mille", "million", "milliard" };
 		private static int globalCounter;
 		private static string tempPath;
 		private static bool usingTempPath;
@@ -437,7 +437,7 @@ namespace TDV
 		private static String getWordDigit(String number)
 		{
 			if (number.Equals("0"))
-				return "zero";
+				return "zéro";
 			return digits[int.Parse(number) - 1];
 		}
 
@@ -454,21 +454,23 @@ namespace TDV
 		private static String getTripple(String number)
 		{
 			if (number.Equals("0"))
-				return "zero";
+				return "zéro";
 			String res = "";
 			int n = number.Length;
 			String d = "";
 			if (n == 3) {
 				d = number.Substring(0, 1);
-				if (d != "0") {
+				if (d != "0" && d != "1") {
 					d = getWordDigit(d);
-					res += d + " hundred";
-				}
+					res += d + " cent";
+				} else if (d == "1") {
+          res += " cent";
+        }
 			}
 			if (n >= 2) {
 				d = number.Substring(n - 2, 1);
 				if (d != "0") {
-					if (d != "1")
+					if (d != "1" && d != "7" && d != "9")
 						d = getWordTens(d);
 					else
 						d = getWordDigit(number.Substring(n - 2, 2));
@@ -502,6 +504,12 @@ namespace TDV
 			int triplets = number.Length / 3;
 			int mostSig = number.Length % 3;
 			String res = "";
+      if (negative)
+        res = " moins ";
+      res += number;
+      if (!fraction.Equals(""))
+        res += " virgule " + fraction;
+      return res;
 			String triplet = "";
 			for (int i = 0; i < triplets; i++) {
 				triplet = number.Substring(number.Length - 3 * i - 3, 3);
@@ -526,12 +534,12 @@ namespace TDV
 			if (thePoint > -1) {
 				if (!res.Equals(""))
 					res += " ";
-				res += "point";
+				res += "virgule";
 				for (int i = 0, n = fraction.Length; i < n; i++)
 					res += " " + getWordDigit(fraction[i].ToString());
 			}
 			if (negative)
-				res = "negative " + res;
+				res = "moins " + res;
 			return res;
 		}
 
