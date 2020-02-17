@@ -2145,7 +2145,7 @@ weapon.firingRange);
 						}, () =>
 						{
 							position.sapiMode = true;
-							SapiSpeech.speak($"{Common.getFriendlyNameOf(weapon.getLockedTarget().ToString())} {position}, sector: {Interaction.getSector(weapon.getLockedTarget(), false)}", flag);
+							SapiSpeech.speak($"{Common.getFriendlyNameOf(weapon.getLockedTarget().ToString())} {position}, secteur: {Interaction.getSector(weapon.getLockedTarget(), false)}", flag);
 						}, Options.statusVoiceMode);
 						if (Options.RPAutoTrigger)
 							sayRelative = true;

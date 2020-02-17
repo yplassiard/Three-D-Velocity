@@ -359,7 +359,7 @@ namespace TDVServer
 			Assembly execAssembly = Assembly.GetCallingAssembly();
 			AssemblyName name = execAssembly.GetName();
 			serverVersion = name.Version.Major.ToString() + "." + name.Version.Minor.ToString();
-			output(LoggingLevels.indiscriminate, "Running server version " + serverVersion);
+			output(LoggingLevels.indiscriminate, "Version du serveur " + serverVersion);
 			int cliTrack = 0;
 
 			while (cliTrack < args.Length) {
@@ -367,7 +367,7 @@ namespace TDVServer
 				if (arg.Equals("--log")) {
 					cliTrack++;
 					if (cliTrack == args.Length)
-						output(LoggingLevels.indiscriminate, "no arguments to --log parameter. Using default logging level");
+						output(LoggingLevels.indiscriminate, "Aucun argument passé à --log ; utilisation de la valeur par défaut");
 					else {
 						String[] levels = args[cliTrack].ToLower().Trim().Split(',');
 						String newLevels = "";
@@ -397,7 +397,7 @@ namespace TDVServer
 							}
 						}
 						newLevels = newLevels.Substring(0, newLevels.Length - 2);
-						output(LoggingLevels.indiscriminate, "Logging levels in effect: " + newLevels);
+						output(LoggingLevels.indiscriminate, "Logs activés: " + newLevels);
 					}
 				}
 				cliTrack++;
@@ -406,9 +406,9 @@ namespace TDVServer
 				while (!completedDownload)
 					Thread.Sleep(500);
 				if (error)
-					output(LoggingLevels.error, "An error occurred during the download of an update. Could not complete update.");
+					output(LoggingLevels.error, "Une erreur s'est produite durant le téléchargement d'une mise à jour. Impossible de continuer.");
 				else {
-					output(LoggingLevels.info, "Shutting down server to apply update");
+					output(LoggingLevels.info, "Fermeture du serveur pour appliquer la mise à jour.");
 					System.Diagnostics.Process.Start("Updater.exe", "TDVServer.exe");
 					return;
 				}
@@ -425,7 +425,7 @@ namespace TDVServer
 				returns = new List<Player>();
 				serverStartTime = DateTime.Now;
 				currentDay = DateTime.Now;
-				output(LoggingLevels.indiscriminate, "Initializing...");
+				output(LoggingLevels.indiscriminate, "Initialisation...");
 				clientList = new Dictionary<String, Player>();
 				gameList = new Dictionary<String, Game>();
 				chatRooms = new Dictionary<String, ChatRoom>();
@@ -438,7 +438,7 @@ namespace TDVServer
 					connections[i] = new TcpListener(IPAddress.Parse("0.0.0.0"),
 					 ports[i]);
 					connections[i].Start();
-					output(LoggingLevels.indiscriminate, "Server listening on port " + ports[i]);
+					output(LoggingLevels.indiscriminate, "Server en écoute sur le port " + ports[i]);
 					connections[i].BeginAcceptTcpClient(new AsyncCallback(whenConnectionMade),
 					 connections[i]);
 				}
@@ -465,25 +465,25 @@ namespace TDVServer
 				listener = (TcpListener)result.AsyncState;
 				c = listener.EndAcceptTcpClient(result);
 				String callSign = null;
-				output(LoggingLevels.debug, "Client connected!");
+				output(LoggingLevels.debug, "Client connecté!");
 				//Next, client will send call sign to server.
 				//Wait for it.
-				output(LoggingLevels.debug, "Waiting for call sign.");
+				output(LoggingLevels.debug, "En attente du Call Sign.");
 				try {
 					using (BinaryReader signReader = new BinaryReader(CSCommon.getData(c, 10000, true))) {
 						callSign = signReader.ReadString();
 					} //using
 				}
 				catch (System.TimeoutException e) {
-					output(LoggingLevels.error, "Client never sent sign!" + e.GetBaseException() + " Closed connection.");
+					output(LoggingLevels.error, "Le client n'a jamais envoyé son Call Sign!" + e.GetBaseException() + " Connexion fermée.");
 					error = true;
 					return;
 				}
 				catch (System.Net.Sockets.SocketException e) {
-					output(LoggingLevels.error, e.Message + " Closing connection.");
+					output(LoggingLevels.error, e.Message + " Fermeture de la connexion.");
 					return;
 				} //try/catch
-				output(LoggingLevels.info, "New connection, call sign is " + callSign + ".");
+				output(LoggingLevels.info, "Nouvelle connexion, Call Sign: " + callSign + ".");
 				//Custom logic to determine admin flag goes here
 				bool admin = false;
 				sendChatMessage(null, callSign + " has logged on.", MessageType.enterRoom, true);
@@ -505,7 +505,7 @@ namespace TDVServer
 			finally {
 				if (error) {
 					c.Close();
-					output(LoggingLevels.error, "Closed due to error.");
+					output(LoggingLevels.error, "Fermé en raison d'une erreur.");
 				} else {
 					output(LoggingLevels.debug, "ok");
 				} //if !error
@@ -518,7 +518,7 @@ namespace TDVServer
 			int port = ((IPEndPoint)listener.LocalEndpoint).Port;
 			listener.BeginAcceptTcpClient(new AsyncCallback(whenConnectionMade),
 			   listener);
-			output(LoggingLevels.info, "Listening for connection on port " + port);
+			output(LoggingLevels.info, "écoute de connexions entrantes sur le port " + port);
 		}
 
 		/// <summary>
@@ -587,7 +587,7 @@ namespace TDVServer
 							} //foreach
 						}
 						catch (Exception e) {
-							output(LoggingLevels.error, "ERROR: startMonitoringForData\n"
+							output(LoggingLevels.error, "ERREUR: startMonitoringForData\n"
 							   + e.Message + e.StackTrace);
 							crash = true;
 						}
@@ -813,7 +813,7 @@ namespace TDVServer
 				}
 			}
 			catch (Exception e) {
-				output(LoggingLevels.error, "ERROR: removeFromGame:\n"
+				output(LoggingLevels.error, "ERREUR: removeFromGame:\n"
 				+ e.Message + e.StackTrace);
 				crash = true;
 			}
@@ -837,7 +837,7 @@ namespace TDVServer
 			leaveRoom(tag, false);
 			clientList.Remove(tag);
 			sendChatMessage(null, name + " has left the server.", MessageType.leaveRoom, true);
-			output(LoggingLevels.debug, name + " disconnected");
+			output(LoggingLevels.debug, name + " déconnecté");
 			modifiedClientList = true;
 		}
 
@@ -850,9 +850,9 @@ namespace TDVServer
 		private static Game createNewGame(String tag, Game.GameType type)
 		{
 			if (tag != null)
-				output(LoggingLevels.debug, "creating game at request of " + tag);
+				output(LoggingLevels.debug, "Création d'une partie à l'initiative de " + tag);
 			else
-				output(LoggingLevels.debug, "Creating FFA.");
+				output(LoggingLevels.debug, "Création de FFA.");
 			String id = getID(gameList);
 			Game g = new Game(id, type);
 			g.gameFinished += gameFinishedEvent;
@@ -881,7 +881,7 @@ namespace TDVServer
 		private static void gameFinishedEvent(Game sender)
 		{
 			gameList.Remove(sender.id);
-			output(LoggingLevels.debug, "Game " + sender.id + " ended.");
+			output(LoggingLevels.debug, "Partie " + sender.id + " terminée.");
 			sender.gameFinished -= gameFinishedEvent;
 		}
 
@@ -893,9 +893,9 @@ namespace TDVServer
 		/// <returns>If the player could be added, returns the name of the game. else NULL.</returns>
 		private static String joinGame(String tag, String id)
 		{
-			output(LoggingLevels.debug, "Joining game " + id + " using client " + tag);
+			output(LoggingLevels.debug, "Rejoint la partie " + id + " en utilisant le client " + tag);
 			if (!gameList.ContainsKey(id)) {
-				output(LoggingLevels.error, "ERROR: id " + id + " doesn't exist.");
+				output(LoggingLevels.error, "ERREUR: id " + id + " n'existe pas.");
 				CSCommon.sendResponse(clientList[tag].client, false);
 				return null;
 			}
@@ -979,10 +979,10 @@ namespace TDVServer
 		private static void sendMessage(String message, TcpClient exclude)
 		{
 			output(LoggingLevels.messages, message);
-			output(LoggingLevels.debug, "Sending message: " + message);
+			output(LoggingLevels.debug, "Envoi du message: " + message);
 			MemoryStream sendStream = CSCommon.buildCMDString(CSCommon.cmd_serverMessage, message);
 			propogate(sendStream, exclude);
-			output(LoggingLevels.debug, "Success");
+			output(LoggingLevels.debug, "Succès");
 		}
 
 		/// <summary>
@@ -1225,17 +1225,17 @@ namespace TDVServer
 		private static void cleanUp()
 		{
 			try {
-				output(LoggingLevels.debug, "Cleaning up...");
+				output(LoggingLevels.debug, "Nettoyage...");
 				foreach (Game g in gameList.Values)
 					g.setForceGameEnd((rebooting) ? null : "there was a problem with the server.");
 				while (gameList.Count != 0)
 					Thread.Sleep(0);
-				output(LoggingLevels.debug, "All games ended.");
+				output(LoggingLevels.debug, "Toutes les partes sont terminées.");
 				for (int i = 0; i < connections.Length; i++)
 					connections[i].Stop();
-				output(LoggingLevels.debug, "Connections closed.");
+				output(LoggingLevels.debug, "Connexions fermées.");
 
-				output(LoggingLevels.debug, "Cleaned up, ending server process.");
+				output(LoggingLevels.debug, "Nettoyage terminé, sortie du serveur...");
 				if (theFile != null) {
 					theFile.Flush();
 					theFile.Close();
@@ -1300,7 +1300,7 @@ namespace TDVServer
 				theFile = new StreamWriter(String.Format("log{0}.log", currentDay.ToString("MMMM-d-yyyy")), true);
 				theChatFile = new StreamWriter(String.Format("chat{0}.log", currentDay.ToString("MMMM-d-yyyy")));
 			}
-			output(LoggingLevels.info, "New log created on " + DateTime.Now.ToString("MMMM/d/yyyy"));
+			output(LoggingLevels.info, "Nouveau journal créé le " + DateTime.Now.ToString("d/MMMM/yyyy"));
 		}
 
 		private static void nextDay()
@@ -1311,7 +1311,7 @@ namespace TDVServer
 		private static void setMessage(String msg)
 		{
 			dayMsg = msg;
-			output(LoggingLevels.info, "Message of the day now set to " + dayMsg);
+			output(LoggingLevels.info, "Message d'accueil réglé sur " + dayMsg);
 		}
 
 		private static void sendMessageOfTheDay(String tag)
@@ -1455,7 +1455,7 @@ namespace TDVServer
 		/// <param name="comments">Any comments such as update history. Can be null</param>
 		private static void updateTo(String from, String to, String comments)
 		{
-			output(LoggingLevels.indiscriminate, "Downloading update...");
+			output(LoggingLevels.indiscriminate, "Téléchargement de la mise à jour...");
 			downloadUpdate("https://github.com/munawarb/Three-D-Velocity-Binaries/archive/master.zip", "Three-D-Velocity-Binaries-master.zip");
 		}
 
@@ -1478,7 +1478,7 @@ namespace TDVServer
 		{
 			if (e.ProgressPercentage != lastProgress && e.ProgressPercentage % 5 == 0) {
 				lastProgress = e.ProgressPercentage;
-				output(LoggingLevels.indiscriminate, e.ProgressPercentage + " percent complete");
+				output(LoggingLevels.indiscriminate, e.ProgressPercentage + " pour cent terniné");
 			}
 		}
 
